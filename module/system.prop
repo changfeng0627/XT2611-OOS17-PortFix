@@ -1,0 +1,1 @@
+# Toggleable properties are dynamically applied in post-fs-data.sh via /data/adb/avr_portfix/config.conf

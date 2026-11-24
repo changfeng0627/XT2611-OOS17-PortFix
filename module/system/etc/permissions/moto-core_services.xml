@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 为 Moto 相机提供 <uses-library name="moto-core_services"> 的解析目标。
+     实际提供的是 no-op 版 MotoPerfManagerWrapper（见 system/framework/moto-core_services.jar），
+     用于避免移植机上 MotoPerfManagerWrapper 抛 RuntimeException("Stub!")。 -->
+<permissions>
+    <library
+        name="moto-core_services"
+        file="/system/framework/moto-core_services.jar"
+    />
+</permissions>

@@ -1,0 +1,20 @@
+# vendor batt_health daemon reads default-tagged props; allow read/open/getattr/map
+allow batt_health default_prop file { read open getattr map }
+
+# cameraserver 读取补丁库与音频配置时所需（不同内核策略下可能缺失）
+allow cameraserver system_lib_file file read
+allow cameraserver vendor_configs_file file read
+
+# Moto 相机 (MotCamera5, untrusted_app_34) 访问离线 ISP 后处理 HAL 与 CDSP 加速
+allow untrusted_app_34 vendor_hal_motopp_service service_manager { find }
+allow untrusted_app_34 hal_camera_service service_manager { find }
+allow untrusted_app_34 hal_camera_default binder { call transfer }
+allow hal_camera_default untrusted_app_34 binder { call transfer }
+allow hal_camera_default untrusted_app_34 fd { use }
+allow untrusted_app_34 hal_camera_default fd { use }
+allow untrusted_app_34 vendor_xdsp_device chr_file { read write open ioctl getattr }
+allow untrusted_app_34 vendor_qdsp_device chr_file { read write open ioctl getattr }
+allow untrusted_app_34 vendor_mot_hw_prop file { read open getattr map }
+allow untrusted_app_34 adsprpcd_file dir { search read open getattr }
+allow untrusted_app_34 adsprpcd_file file { read open getattr }
+allow untrusted_app_34 cgroup_v2 dir { search read open getattr }

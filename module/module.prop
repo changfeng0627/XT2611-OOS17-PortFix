@@ -1,0 +1,6 @@
+id=avr_portfix
+name=AVR Port Fix (XT2611 / OOS 17)
+version=v1.0.0
+versionCode=100
+author=DSH + Antigravity
+description=XT2611-1 移植 OOS 17 综合修复模块与 MD3 控制台（免刷额外系统镜像）：真2K/144Hz与QHD控制中心校准、相机多帧算法/扫码/前摄美颜、音频/USB-C DAC、内存拓展、真实电池健康、百度定位、5G信号格数校准、后台留存与国行游戏助手解锁。
