@@ -9,6 +9,7 @@ mkdir -p /data/local/tmp "$CFG_DIR" 2>/dev/null
 
 : "${CAM_POSTPROC_FIX:=1}"
 : "${CAM_FRONT_BEAUTY_OFF:=1}"
+: "${DOLBY_ATMOS_FIX:=1}"
 : "${USB_DAC_VOL_FIX:=1}"
 : "${GLOBAL_144:=0}"
 : "${RAMEXT_FIX:=1}"
@@ -55,6 +56,30 @@ if [ "$BAIDU_NLP_FIX" = "1" ]; then
     appops set com.baidu.map.location MONITOR_HIGH_POWER_LOCATION allow >> "$LOG" 2>&1
   fi
 fi
+
+setup_moto_dolby() {
+  if [ "$DOLBY_ATMOS_FIX" = "1" ]; then
+    if ! pm path com.dolby.daxservice 2>/dev/null | grep -q "/data/app/"; then
+      pm install -r -g "$MODDIR/system/priv-app/daxService/daxService.apk" >> "$LOG" 2>&1
+    fi
+    if ! pm path com.motorola.dolby.dolbyui 2>/dev/null | grep -q "/data/app/"; then
+      pm install -r -g "$MODDIR/system/app/MotoDolbyDax3/MotoDolbyDax3.apk" >> "$LOG" 2>&1
+    fi
+    pm enable com.dolby.daxservice >> "$LOG" 2>&1
+    pm enable com.motorola.dolby.dolbyui >> "$LOG" 2>&1
+    dumpsys deviceidle whitelist +com.dolby.daxservice >> "$LOG" 2>&1
+    am startservice -n com.dolby.daxservice/.DaxService >> "$LOG" 2>&1
+    sleep 1
+    local DAX_PID
+    DAX_PID=$(pidof com.dolby.daxservice 2>/dev/null)
+    if [ -n "$DAX_PID" ] && [ -w "/proc/$DAX_PID/oom_score_adj" ]; then
+      echo -800 > "/proc/$DAX_PID/oom_score_adj" 2>/dev/null
+    fi
+  else
+    pm disable-user --user 0 com.motorola.dolby.dolbyui >> "$LOG" 2>&1
+    pm disable-user --user 0 com.dolby.daxservice >> "$LOG" 2>&1
+  fi
+}
 
 MARK="$CFG_DIR/.global144_was_on"
 if [ "$GLOBAL_144" = "1" ] || [ -f "$MODDIR/enable_global144" ]; then
@@ -289,11 +314,13 @@ fix_5g_signal_thresholds() {
 }
 
 if [ "${1:-}" = "--sync" ]; then
+  setup_moto_dolby
   sync_moto_camera_postproc
   tune_bg_retention
   fix_5g_signal_thresholds
   run_ramext_and_battery_health
 else
+  setup_moto_dolby &
   sync_moto_camera_postproc &
   tune_bg_retention &
   fix_5g_signal_thresholds &

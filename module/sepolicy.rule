@@ -18,3 +18,16 @@ allow untrusted_app_34 vendor_mot_hw_prop file { read open getattr map }
 allow untrusted_app_34 adsprpcd_file dir { search read open getattr }
 allow untrusted_app_34 adsprpcd_file file { read open getattr }
 allow untrusted_app_34 cgroup_v2 dir { search read open getattr }
+
+# 摩托原厂杜比全景声 (daxService + MotoDolbyDax3) 访问硬件 vendor.dolby.dms.IDms HAL
+allow priv_app hal_aidl_dms_service service_manager find
+allow priv_app hal_aidl_dms_default binder { call transfer }
+allow hal_aidl_dms_default priv_app binder { call transfer }
+allow system_app hal_aidl_dms_service service_manager find
+allow system_app hal_aidl_dms_default binder { call transfer }
+allow hal_aidl_dms_default system_app binder { call transfer }
+allow untrusted_app hal_aidl_dms_service service_manager find
+allow untrusted_app hal_aidl_dms_default binder { call transfer }
+allow hal_aidl_dms_default untrusted_app binder { call transfer }
+allow priv_app vendor_system_prop file { read open getattr map }
+allow system_app vendor_system_prop file { read open getattr map }

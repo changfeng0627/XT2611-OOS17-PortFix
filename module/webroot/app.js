@@ -1,4 +1,4 @@
-// AVR Port Fix v1.0.0 — KernelSU WebUI (MD3 Expressive + Monet Dynamic Color)
+// AVR Port Fix v1.1.0 — KernelSU WebUI (MD3 Expressive + Monet Dynamic Color)
 const CFG_DIR = '/data/adb/avr_portfix';
 const CFG_PATH = '/data/adb/avr_portfix/config.conf';
 const MOD_DIR = '/data/adb/modules/avr_portfix';
@@ -7,6 +7,7 @@ const DEFAULTS = {
   CAM_EXT_FIX: '1',
   CAM_POSTPROC_FIX: '1',
   CAM_FRONT_BEAUTY_OFF: '1',
+  DOLBY_ATMOS_FIX: '1',
   AUDIO_NOFAST_FIX: '1',
   USB_DAC_VOL_FIX: '1',
   REFRESH_144_FIX: '1',
@@ -183,6 +184,7 @@ async function applyLiveAction(liveType, enabled) {
     case 'batthealth':
     case 'campostproc':
     case 'signal5g':
+    case 'dolbyatmos':
       await exec(`sh ${MOD_DIR}/service.sh --sync >/dev/null 2>&1`);
       break;
     case 'usbdac':
@@ -228,10 +230,11 @@ async function refreshStatus() {
     [ -z "$SWAP" ] && SWAP="关闭"
     SOH=$(cat /sys/class/power_supply/battery/state_of_health 2>/dev/null | tr -dc '0-9')
     CAM=$(ls /data/app/~~*/com.motorola.camera5-*/lib/arm64/libenginepostproc.moto.so 2>/dev/null | wc -l)
+    DLB=$(dumpsys media.audio_flinger 2>/dev/null | grep -c "Dolby Laboratories"); [ -z "$DLB" ] && DLB=0
     NLP=$(dumpsys location 2>/dev/null | grep -q "com.baidu.map.location.*connected=true" && echo "已连接" || echo "待唤醒")
     FRZ=$(settings get global cached_apps_freezer 2>/dev/null)
     EUEX=$(grep -c "com.games.euex" /my_stock/etc/permissions/com.oplus.android-features.xml 2>/dev/null); [ -z "$EUEX" ] && EUEX=0
-    echo "SZ=$SZ|DP=$DP|QHD=$QHD|SWAP=$SWAP|SOH=$SOH|CAM=$CAM|NLP=$NLP|FRZ=$FRZ|EUEX=$EUEX"
+    echo "SZ=$SZ|DP=$DP|QHD=$QHD|SWAP=$SWAP|SOH=$SOH|CAM=$CAM|DLB=$DLB|NLP=$NLP|FRZ=$FRZ|EUEX=$EUEX"
   `;
   const res = await exec(cmd);
   const kv = {};
@@ -242,19 +245,20 @@ async function refreshStatus() {
 
   document.getElementById('m-disp').textContent = `${kv.SZ || '--'} · ${kv.DP || '--'}dpi (QHD锁${kv.QHD || '--'})`;
   document.getElementById('m-ram-batt').textContent = `Swap ${kv.SWAP || '--'} · 电池 ${kv.SOH ? kv.SOH + '%' : '--'}`;
-  document.getElementById('m-cam-loc').textContent = `多帧${kv.CAM === '1' ? '已就绪' : '未就绪'} · 定位${kv.NLP || '--'}`;
+  document.getElementById('m-cam-loc').textContent = `多帧${kv.CAM === '1' ? '就绪' : '待装'} · 杜比${Number(kv.DLB) > 0 ? '已挂载' : '关闭'} · 定位${kv.NLP || '--'}`;
   document.getElementById('m-bg-game').textContent = `墓碑${kv.FRZ === 'enabled' ? '开' : '关'} · 游戏${kv.EUEX === '0' ? '国行已解' : 'EUEX'}`;
 
   const okCount = [
     kv.QHD === '634',
     kv.SWAP && kv.SWAP !== '关闭',
     kv.CAM === '1',
+    Number(kv.DLB) > 0,
     kv.FRZ === 'enabled',
     kv.EUEX === '0',
   ].filter(Boolean).length;
 
   const pill = document.getElementById('overall-pill');
-  pill.textContent = okCount === 5 ? `全部已生效 (5/5)` : (okCount >= 4 ? `运行正常 (${okCount}/5)` : `部分待生效 (${okCount}/5)`);
+  pill.textContent = okCount === 6 ? `全部已生效 (6/6)` : (okCount >= 5 ? `运行正常 (${okCount}/6)` : `部分待生效 (${okCount}/6)`);
 
   setTimeout(() => btn.classList.remove('spinning'), 350);
 }

@@ -10,25 +10,25 @@
 
 ## 下载文件位置（GitHub Releases）
 
-由于补丁版摩托相机 APK 体积约 338 MB，成品刷机包与 APK 均托管在本仓库的 **[Releases (v1.0.0)](https://github.com/changfeng0627/XT2611-OOS17-PortFix/releases/tag/v1.0.0)** 页面中：
+成品刷机包与补丁版摩托相机 APK（约 338 MB）均托管在本仓库的 **[Releases (v1.1.0)](https://github.com/changfeng0627/XT2611-OOS17-PortFix/releases/tag/v1.1.0)** 页面中：
 
-1. **[AVR_PortFix-v1.0.0.zip](https://github.com/changfeng0627/XT2611-OOS17-PortFix/releases/download/v1.0.0/AVR_PortFix-v1.0.0.zip)**
-   综合核心修复模块，内置 Material Design 3 动态取色 WebUI，支持 16 项功能独立开关与实时状态巡检，免刷额外修改版 `system.img`。
-2. **[MotCamera5-patched-signed.apk](https://github.com/changfeng0627/XT2611-OOS17-PortFix/releases/download/v1.0.0/MotCamera5-patched-signed.apk)**
-   补丁版摩托原厂相机（位于本仓库 **Releases → v1.0.0 → Assets**），配合模块自动注入原厂离线后处理引擎，恢复暗光多帧降噪与 HDR 算法。
+1. **[AVR_PortFix-v1.1.0.zip](https://github.com/changfeng0627/XT2611-OOS17-PortFix/releases/download/v1.1.0/AVR_PortFix-v1.1.0.zip)**
+   综合核心修复模块，内置 Material Design 3 动态取色 WebUI，支持 17 项功能独立开关与实时状态巡检，免刷额外修改版 `system.img`。
+2. **[MotCamera5-patched-signed.apk](https://github.com/changfeng0627/XT2611-OOS17-PortFix/releases/download/v1.1.0/MotCamera5-patched-signed.apk)**
+   补丁版摩托原厂相机（位于本仓库 **Releases → v1.1.0 → Assets**），配合模块自动注入原厂离线后处理引擎，恢复暗光多帧降噪与 HDR 算法。
 
 ## 安装步骤
 
 1. **刷入模块**
-   - 在 KernelSU / KernelSU Next / APatch / Magisk 中直接刷入 `AVR_PortFix-v1.0.0.zip` 并重启。
+   - 在 KernelSU / KernelSU Next / APatch / Magisk 中直接刷入 `AVR_PortFix-v1.1.0.zip` 并重启。
    - **WebUI 说明**：KSU / KSU Next / APatch 在模块列表点击「打开」即可进入 MD3 控制台；Magisk 用户默认全功能生效，如需图形化开关可额外安装 KsuWebUI 独立版打开。
 2. **安装补丁相机（恢复多帧算法）**
-   - 前往本仓库 [Releases (v1.0.0)](https://github.com/changfeng0627/XT2611-OOS17-PortFix/releases/tag/v1.0.0) 下载 `MotCamera5-patched-signed.apk`。
+   - 前往本仓库 [Releases (v1.1.0)](https://github.com/changfeng0627/XT2611-OOS17-PortFix/releases/tag/v1.1.0) 下载 `MotCamera5-patched-signed.apk`。
    - 如已内置不同签名的摩托相机，先通过 LSPosed 开启核心破解（CorePatch）或卸载原版，再安装 `MotCamera5-patched-signed.apk`，装完重启一次（或在 WebUI 里重新开关一次「摩托相机多帧降噪」）即可生效。
 3. **可选：国行游戏助手增强**
    - 模块已移除欧盟阉割标记 `com.games.euex`；可配合国行版游戏助手与 LuckyTool（LSPosed 勾选游戏助手作用域）解锁更多功能。
 
-## 内置 16 项功能
+## 内置 17 项功能
 
 WebUI 全部支持独立开关，配置持久化保存在 `/data/adb/avr_portfix/config.conf`。
 
@@ -38,6 +38,7 @@ WebUI 全部支持独立开关，配置持久化保存在 `/data/adb/avr_portfix
 - **全局固定 144Hz**：默认关闭，开启后锁定全局 144Hz，关闭恢复自适应。
 
 ### 相机与音频
+- **摩托原厂杜比全景声 (DAX3)**：集成并修补原厂 `daxService` 与杜比全景声应用，直驱底层 `vendor.dolby.dms` 硬件杜比引擎与 6 套扬声器调音；已适配氧OS 原生卡片分组（位于「设置 → 声音与振动 → 音效 → 杜比全景声」）、桌面图标与控制中心快捷开关，无需手动设置 KSU 卸载模块。
 - **摩托相机多帧降噪与离线 ISP 算法**：补齐原厂 `libenginepostproc.moto.so` 与 AIDL 客户端及 SELinux 权限，修复暗光满屏噪点与 `RAW_HDR` 回退。
 - **相机扩展 ANR 修复**：跳过缺失的 `sendextcamcmd` 等待，修复微信扫一扫与第三方调用卡死。
 - **前摄美颜防预览卡死**：自动保持前摄美颜关闭，避免 Meishe 渲染失败导致前置预览冻结。
@@ -60,7 +61,7 @@ WebUI 全部支持独立开关，配置持久化保存在 `/data/adb/avr_portfix
 
 ```text
 .
-├── module/                  # Root 模块完整源码（脚本、配置、WebUI、依赖库）
+├── module/                  # Root 模块完整源码（脚本、配置、WebUI、杜比与定位组件）
 │   ├── module.prop
 │   ├── customize.sh
 │   ├── post-fs-data.sh
@@ -77,6 +78,15 @@ WebUI 全部支持独立开关，配置持久化保存在 `/data/adb/avr_portfix
 ```bash
 python scripts/build_zip.py
 ```
+
+## 更新日志
+
+- **v1.1.0**
+  - 新增并集成摩托原厂真杜比全景声（`DAX3`），直驱 `vendor.dolby.dms` 硬件杜比引擎与 6 套扬声器调音。
+  - 修复「设置 → 声音与振动」中杜比全景声入口位置错位与卡片贴边问题，完美嵌入原生「音效」分组卡片内。
+  - MD3 WebUI 升级至 `v1.1.0`，新增杜比全景声即时开关与引擎挂载状态巡检；补齐 Magisk `META-INF` 通用安装脚本。
+- **v1.0.0**
+  - 首个公开综合修复版本（内置 16 项核心修复与 MD3 动态取色 WebUI）。
 
 ## 致谢
 

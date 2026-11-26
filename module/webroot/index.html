@@ -19,7 +19,7 @@
         </button>
       </div>
       <h1 class="headline">AVR Port Fix</h1>
-      <p class="subtitle">Material You 动态取色控制台 · v1.0.0</p>
+      <p class="subtitle">Material You 动态取色控制台 · v1.1.0</p>
     </header>
 
     <section class="hero-card" id="status-card">
@@ -37,7 +37,7 @@
           <div class="metric-val" id="m-ram-batt">--</div>
         </div>
         <div class="metric-tile">
-          <div class="metric-label">相机算法 / 定位</div>
+          <div class="metric-label">相机 / 杜比 / 定位</div>
           <div class="metric-val" id="m-cam-loc">--</div>
         </div>
         <div class="metric-tile">
@@ -112,6 +112,13 @@
             <div class="item-desc">修正 Lens OEM 相机包名，使智能镜头入口可正常拉起</div>
           </div>
           <label class="md3-switch"><input type="checkbox" data-key="LENS_OEM_FIX" data-reboot="1" /><span class="track"><span class="thumb"></span></span></label>
+        </div>
+        <div class="list-item">
+          <div class="item-body">
+            <div class="item-title">摩托原厂杜比全景声 (DAX3) <span class="badge-live">即时</span></div>
+            <div class="item-desc">直驱原厂 vendor.dolby.dms 硬件杜比引擎与 6 套调音，嵌入「声音与振动 → 音效」卡片及桌面/快捷开关</div>
+          </div>
+          <label class="md3-switch"><input type="checkbox" data-key="DOLBY_ATMOS_FIX" data-live="dolbyatmos" /><span class="track"><span class="thumb"></span></span></label>
         </div>
         <div class="list-item">
           <div class="item-body">
