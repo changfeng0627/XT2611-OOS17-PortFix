@@ -19,7 +19,7 @@
         </button>
       </div>
       <h1 class="headline">AVR Port Fix</h1>
-      <p class="subtitle">Material You 动态取色控制台 · v1.1.0</p>
+      <p class="subtitle">Material You 动态取色控制台 · v1.2.1</p>
     </header>
 
     <section class="hero-card" id="status-card">
@@ -60,31 +60,31 @@
       <div class="card-list">
         <div class="list-item">
           <div class="item-body">
-            <div class="item-title">真 2K QHD+ 控制中心零留白校准 <span class="badge-reboot">需重启</span></div>
-            <div class="item-desc">将 ro.oplus.density.qhd_default 校准为 634 并优化 5 档缩放，2K 下控制中心与锁屏无留白</div>
-          </div>
-          <label class="md3-switch"><input type="checkbox" data-key="QHD_DPI_FIX" data-reboot="1" /><span class="track"><span class="thumb"></span></span></label>
-        </div>
-        <div class="list-item">
-          <div class="item-body">
-            <div class="item-title">144Hz 极速高刷档位自愈 <span class="badge-reboot">需重启</span></div>
-            <div class="item-desc">保持设置内 144Hz 极速高刷开关与游戏高刷上限不丢失</div>
-          </div>
-          <label class="md3-switch"><input type="checkbox" data-key="REFRESH_144_FIX" data-reboot="1" /><span class="track"><span class="thumb"></span></span></label>
-        </div>
-        <div class="list-item">
-          <div class="item-body">
             <div class="item-title">全局强制固定 144Hz <span class="badge-live">即时</span></div>
-            <div class="item-desc">锁定 min/peak 刷新率为 144Hz（关闭后恢复自适应动态刷新率）</div>
+            <div class="item-desc">锁定 min/peak 刷新率为 144Hz（关闭后恢复 LTPO/动态自适应刷新率）</div>
           </div>
           <label class="md3-switch"><input type="checkbox" data-key="GLOBAL_144" data-live="global144" /><span class="track"><span class="thumb"></span></span></label>
+        </div>
+        <div class="list-item">
+          <div class="item-body">
+            <div class="item-title">真 2K QHD+ 密度校准 (634 DPI) <span class="badge-reboot">需重启</span></div>
+            <div class="item-desc">校准 2K 默认 DPI 与 5 档缩放，解决控制中心与锁屏留白（自定义 DPI 用户可关）</div>
+          </div>
+          <label class="md3-switch"><input type="checkbox" data-key="QHD_DPI_FIX" data-reboot="1" /><span class="track"><span class="thumb"></span></span></label>
         </div>
       </div>
     </section>
 
     <section class="group">
-      <h2 class="group-title">相机算法与音频</h2>
+      <h2 class="group-title">相机与音频</h2>
       <div class="card-list">
+        <div class="list-item">
+          <div class="item-body">
+            <div class="item-title">摩托原厂杜比全景声 (DAX3) <span class="badge-live">即时</span></div>
+            <div class="item-desc">直驱原厂 vendor.dolby.dms 硬件引擎与 6 套调音，嵌入「声音与振动 → 音效」卡片</div>
+          </div>
+          <label class="md3-switch"><input type="checkbox" data-key="DOLBY_ATMOS_FIX" data-live="dolbyatmos" /><span class="track"><span class="thumb"></span></span></label>
+        </div>
         <div class="list-item">
           <div class="item-body">
             <div class="item-title">摩托相机多帧降噪与离线 ISP 算法 <span class="badge-live">即时</span></div>
@@ -94,43 +94,22 @@
         </div>
         <div class="list-item">
           <div class="item-body">
-            <div class="item-title">相机扩展 ANR 修复（微信扫一扫） <span class="badge-reboot">需重启</span></div>
-            <div class="item-desc">跳过缺失的 sendextcamcmd 等待，消除扫码与第三方相机卡死</div>
-          </div>
-          <label class="md3-switch"><input type="checkbox" data-key="CAM_EXT_FIX" data-reboot="1" /><span class="track"><span class="thumb"></span></span></label>
-        </div>
-        <div class="list-item">
-          <div class="item-body">
-            <div class="item-title">前摄美颜防预览卡死 <span class="badge-live">即时</span></div>
-            <div class="item-desc">自动保持前摄美颜关闭，避免 Meishe 渲染失败导致前置预览冻结</div>
+            <div class="item-title">前摄自动关闭美颜（防预览冻结） <span class="badge-live">即时</span></div>
+            <div class="item-desc">保持前摄美颜为 0，避免 Meishe 渲染异常导致前置取景卡死</div>
           </div>
           <label class="md3-switch"><input type="checkbox" data-key="CAM_FRONT_BEAUTY_OFF" data-live="frontbeauty" /><span class="track"><span class="thumb"></span></span></label>
         </div>
         <div class="list-item">
           <div class="item-body">
-            <div class="item-title">Google 智能镜头指向 Moto 相机 <span class="badge-reboot">需重启</span></div>
-            <div class="item-desc">修正 Lens OEM 相机包名，使智能镜头入口可正常拉起</div>
-          </div>
-          <label class="md3-switch"><input type="checkbox" data-key="LENS_OEM_FIX" data-reboot="1" /><span class="track"><span class="thumb"></span></span></label>
-        </div>
-        <div class="list-item">
-          <div class="item-body">
-            <div class="item-title">摩托原厂杜比全景声 (DAX3) <span class="badge-live">即时</span></div>
-            <div class="item-desc">直驱原厂 vendor.dolby.dms 硬件杜比引擎与 6 套调音，嵌入「声音与振动 → 音效」卡片及桌面/快捷开关</div>
-          </div>
-          <label class="md3-switch"><input type="checkbox" data-key="DOLBY_ATMOS_FIX" data-live="dolbyatmos" /><span class="track"><span class="thumb"></span></span></label>
-        </div>
-        <div class="list-item">
-          <div class="item-body">
             <div class="item-title">游戏音频去 primary FAST 修复 <span class="badge-reboot">需重启</span></div>
-            <div class="item-desc">修复部分游戏破音/无声问题</div>
+            <div class="item-desc">修复部分游戏破音/无声问题（音游追求极限低延迟时可按需关闭测试）</div>
           </div>
           <label class="md3-switch"><input type="checkbox" data-key="AUDIO_NOFAST_FIX" data-reboot="1" /><span class="track"><span class="thumb"></span></span></label>
         </div>
         <div class="list-item">
           <div class="item-body">
             <div class="item-title">USB-C DAC 硬件音量映射守护 <span class="badge-live">即时</span></div>
-            <div class="item-desc">将系统媒体音量同步映射到外接 USB-C 小尾巴 UAC 硬件增益</div>
+            <div class="item-desc">无外设零唤醒；插入 USB-C 小尾巴时自动将系统媒体音量同步至 UAC 硬件增益</div>
           </div>
           <label class="md3-switch"><input type="checkbox" data-key="USB_DAC_VOL_FIX" data-live="usbdac" /><span class="track"><span class="thumb"></span></span></label>
         </div>
@@ -138,12 +117,12 @@
     </section>
 
     <section class="group">
-      <h2 class="group-title">性能、后台与硬件</h2>
+      <h2 class="group-title">后台、内存与网络</h2>
       <div class="card-list">
         <div class="list-item">
           <div class="item-body">
             <div class="item-title">后台留存优化（原生墓碑 + LMKD） <span class="badge-live">即时</span></div>
-            <div class="item-desc">启用内核 cgroup 墓碑冻结、解除幽灵进程限制并放宽 16GB 杀后台水位</div>
+            <div class="item-desc">启用 cgroup 墓碑冻结并放宽 16GB 水位（自用第三方后台管理/调度模块时可关）</div>
           </div>
           <label class="md3-switch"><input type="checkbox" data-key="BG_RETENTION_FIX" data-live="bgretention" /><span class="track"><span class="thumb"></span></span></label>
         </div>
@@ -156,51 +135,24 @@
         </div>
         <div class="list-item">
           <div class="item-body">
-            <div class="item-title">真实硬件电池健康度同步 <span class="badge-live">即时</span></div>
-            <div class="item-desc">读取摩托内核 state_of_health 同步至「设置 → 电池健康」</div>
-          </div>
-          <label class="md3-switch"><input type="checkbox" data-key="BATT_HEALTH_FIX" data-live="batthealth" /><span class="track"><span class="thumb"></span></span></label>
-        </div>
-      </div>
-    </section>
-
-    <section class="group">
-      <h2 class="group-title">本土化与系统生态</h2>
-      <div class="card-list">
-        <div class="list-item">
-          <div class="item-body">
             <div class="item-title">国行 5G 状态栏信号格数校准 <span class="badge-live">即时</span></div>
-            <div class="item-desc">将国际版过严的 5G 满格阈值 (-65dBm) 校准为国行标准 (-98dBm)，修复强信号仅显示 1~3 格</div>
+            <div class="item-desc">将国际版过严阈值 (-65dBm) 校准为国行标准 (-98dBm)，修复强信号仅显示 1~3 格</div>
           </div>
           <label class="md3-switch"><input type="checkbox" data-key="SIGNAL_5G_FIX" data-live="signal5g" /><span class="track"><span class="thumb"></span></span></label>
         </div>
         <div class="list-item">
           <div class="item-body">
             <div class="item-title">百度网络定位与逆地理编码 <span class="badge-live">即时</span></div>
-            <div class="item-desc">补齐国行网络定位服务，修复室内/天气/第三方 App 定位失败</div>
+            <div class="item-desc">补齐国行网络定位服务，修复国内室内与天气 App 定位失败</div>
           </div>
           <label class="md3-switch"><input type="checkbox" data-key="BAIDU_NLP_FIX" data-live="baidunlp" /><span class="track"><span class="thumb"></span></span></label>
-        </div>
-        <div class="list-item">
-          <div class="item-body">
-            <div class="item-title">国行游戏助手去 EUEX 限制 <span class="badge-reboot">需重启</span></div>
-            <div class="item-desc">移除 com.games.euex 欧盟阉割标记，保留完整国行游戏助手特性</div>
-          </div>
-          <label class="md3-switch"><input type="checkbox" data-key="GAMES_CN_UNLOCK" data-reboot="1" /><span class="track"><span class="thumb"></span></span></label>
-        </div>
-        <div class="list-item">
-          <div class="item-body">
-            <div class="item-title">OTA 后台防崩溃（保留关于本机卡片） <span class="badge-live">即时</span></div>
-            <div class="item-desc">仅禁用 com.oplus.ota 后台自启广播/服务，保留顶部系统版本卡片</div>
-          </div>
-          <label class="md3-switch"><input type="checkbox" data-key="OTA_BG_DISABLE" data-live="otabg" /><span class="track"><span class="thumb"></span></span></label>
         </div>
       </div>
     </section>
 
     <footer class="footer">
       <button class="outlined-btn" id="btn-reset-default">恢复默认开关</button>
-      <span class="footer-note">配置持久化于 /data/adb/avr_portfix/config.conf</span>
+      <span class="footer-note">已自动常驻内置：扫码防卡死 · 144Hz 档位自愈 · 待机耗电修复 · 电池用量与健康度同步 · 游戏助手国行解锁 · 智能镜头修正 · OTA 防崩</span>
     </footer>
   </div>
 

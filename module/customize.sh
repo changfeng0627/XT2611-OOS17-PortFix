@@ -1,5 +1,5 @@
 SKIPUNZIP=0
-ui_print "- Installing AVR Port Fix v1.1.0 (XT2611-1 / OOS 17)..."
+ui_print "- Installing AVR Port Fix v1.2.1 (XT2611-1 / OOS 17)..."
 # Remove standalone test MotoDolby module if previously installed
 if [ -d /data/adb/modules/moto_dolby_xt2611 ]; then
   touch /data/adb/modules/moto_dolby_xt2611/remove

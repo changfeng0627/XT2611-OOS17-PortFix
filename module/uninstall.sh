@@ -7,3 +7,4 @@ rm -rf /data/swap_ext
 pm uninstall com.motorola.dolby.dolbyui 2>/dev/null
 pm uninstall com.dolby.daxservice 2>/dev/null
 pm uninstall com.baidu.map.location 2>/dev/null
+pm enable com.oplus.audio.effectcenter 2>/dev/null

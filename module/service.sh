@@ -13,10 +13,8 @@ mkdir -p /data/local/tmp "$CFG_DIR" 2>/dev/null
 : "${USB_DAC_VOL_FIX:=1}"
 : "${GLOBAL_144:=0}"
 : "${RAMEXT_FIX:=1}"
-: "${BATT_HEALTH_FIX:=1}"
 : "${BAIDU_NLP_FIX:=1}"
 : "${BG_RETENTION_FIX:=1}"
-: "${OTA_BG_DISABLE:=1}"
 : "${SIGNAL_5G_FIX:=1}"
 
 echo "==== service $(date) ====" >> "$LOG" 2>&1
@@ -27,7 +25,7 @@ while [ $i -lt 60 ]; do
   sleep 2; i=$((i+1))
 done
 
-if [ "$OTA_BG_DISABLE" = "1" ]; then
+if true; then
   pm list packages 2>/dev/null | grep -q "^package:com\.oplus\.cota$" && pm disable-user --user 0 com.oplus.cota >> "$LOG" 2>&1
   if pm list packages 2>/dev/null | grep -q "^package:com\.oplus\.ota$"; then
     pm enable com.oplus.ota >> "$LOG" 2>&1
@@ -78,6 +76,36 @@ setup_moto_dolby() {
   else
     pm disable-user --user 0 com.motorola.dolby.dolbyui >> "$LOG" 2>&1
     pm disable-user --user 0 com.dolby.daxservice >> "$LOG" 2>&1
+  fi
+}
+
+fix_battery_usage_stats() {
+  mkdir -p \
+    /data/oplus/os/battery/oplus_battery_stats/apppower \
+    /data/oplus/os/battery/oplus_battery_stats/apppower_onbattery \
+    /data/oplus/os/battery/oplus_battery_stats/screenactive \
+    /data/oplus/os/battery/oplus_battery_stats/temp \
+    /data/oplus/os/battery/oplus_battery_stats/shutdown \
+    /data/oplus/os/battery/oplus_battery_stats/systemtime/poweraction 2>/dev/null
+  chown -R system:system /data/oplus/os/battery 2>/dev/null
+  chmod 0755 /data/oplus /data/oplus/os /data/oplus/os/battery \
+    /data/oplus/os/battery/oplus_battery_stats \
+    /data/oplus/os/battery/oplus_battery_stats/apppower \
+    /data/oplus/os/battery/oplus_battery_stats/apppower_onbattery \
+    /data/oplus/os/battery/oplus_battery_stats/screenactive \
+    /data/oplus/os/battery/oplus_battery_stats/temp \
+    /data/oplus/os/battery/oplus_battery_stats/shutdown \
+    /data/oplus/os/battery/oplus_battery_stats/systemtime \
+    /data/oplus/os/battery/oplus_battery_stats/systemtime/poweraction 2>/dev/null
+  restorecon /data/oplus 2>/dev/null
+  restorecon -RF /data/oplus/os 2>/dev/null
+}
+
+fix_standby_power_drain() {
+  # 内置修复：禁用每 3 秒向摩托 AudioFlinger 报错重试的欧加 AudioX 空转服务
+  if pm list packages 2>/dev/null | grep -q "^package:com\.oplus\.audio\.effectcenter$"; then
+    pm disable com.oplus.audio.effectcenter/.service.AudioxService >> "$LOG" 2>&1
+    pm disable-user --user 0 com.oplus.audio.effectcenter >> "$LOG" 2>&1
   fi
 }
 
@@ -187,6 +215,7 @@ tune_bg_retention() {
   if [ "$BG_RETENTION_FIX" = "1" ]; then
     settings put global cached_apps_freezer enabled >> "$LOG" 2>&1
     device_config put activity_manager_native_boot use_freezer true >> "$LOG" 2>&1
+    setprop persist.device_config.activity_manager_native_boot.use_freezer true 2>/dev/null
     device_config put activity_manager max_cached_processes 256 >> "$LOG" 2>&1
     device_config put activity_manager max_phantom_processes 2147483647 >> "$LOG" 2>&1
     settings put global settings_enable_monitor_phantom_procs false >> "$LOG" 2>&1
@@ -214,7 +243,7 @@ run_ramext_and_battery_health() {
     sleep 1; w=$((w + 1))
   done
 
-  if [ "$BATT_HEALTH_FIX" = "1" ]; then
+  if true; then
     local SOH
     SOH=$(cat /sys/class/power_supply/battery/state_of_health 2>/dev/null | tr -dc '0-9')
     if [ -n "$SOH" ] && [ "$SOH" -ge 50 ] && [ "$SOH" -le 100 ]; then
@@ -315,12 +344,16 @@ fix_5g_signal_thresholds() {
 
 if [ "${1:-}" = "--sync" ]; then
   setup_moto_dolby
+  fix_standby_power_drain
+  fix_battery_usage_stats
   sync_moto_camera_postproc
   tune_bg_retention
   fix_5g_signal_thresholds
   run_ramext_and_battery_health
 else
   setup_moto_dolby &
+  fix_standby_power_drain &
+  fix_battery_usage_stats &
   sync_moto_camera_postproc &
   tune_bg_retention &
   fix_5g_signal_thresholds &

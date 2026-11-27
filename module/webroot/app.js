@@ -1,26 +1,20 @@
-// AVR Port Fix v1.1.0 — KernelSU WebUI (MD3 Expressive + Monet Dynamic Color)
+// AVR Port Fix v1.2.1 — KernelSU WebUI (MD3 Expressive + Monet Dynamic Color)
 const CFG_DIR = '/data/adb/avr_portfix';
 const CFG_PATH = '/data/adb/avr_portfix/config.conf';
 const MOD_DIR = '/data/adb/modules/avr_portfix';
 
 const DEFAULTS = {
-  CAM_EXT_FIX: '1',
+  QHD_DPI_FIX: '1',
+  GLOBAL_144: '0',
   CAM_POSTPROC_FIX: '1',
   CAM_FRONT_BEAUTY_OFF: '1',
   DOLBY_ATMOS_FIX: '1',
   AUDIO_NOFAST_FIX: '1',
   USB_DAC_VOL_FIX: '1',
-  REFRESH_144_FIX: '1',
-  GLOBAL_144: '0',
-  QHD_DPI_FIX: '1',
-  RAMEXT_FIX: '1',
-  BATT_HEALTH_FIX: '1',
-  BAIDU_NLP_FIX: '1',
   BG_RETENTION_FIX: '1',
-  OTA_BG_DISABLE: '1',
-  GAMES_CN_UNLOCK: '1',
-  LENS_OEM_FIX: '1',
+  RAMEXT_FIX: '1',
   SIGNAL_5G_FIX: '1',
+  BAIDU_NLP_FIX: '1',
 };
 
 let currentConfig = { ...DEFAULTS };
@@ -181,7 +175,6 @@ async function applyLiveAction(liveType, enabled) {
       }
       break;
     case 'ramext':
-    case 'batthealth':
     case 'campostproc':
     case 'signal5g':
     case 'dolbyatmos':
